@@ -12,7 +12,7 @@ import com.google.common.collect.MapMaker;
 public class ConnectionGroup
 {
     /**
-     * Disconnects and removes all connections in the group.
+     * Disconnects all connections in the group.
      */
     public void disconnect ()
     {
@@ -22,12 +22,14 @@ public class ConnectionGroup
         _connections.clear();
     }
 
+    /** Adds a connection to the group. */
     public Connection add (Connection c)
     {
         _connections.put(c, DUMMY_VALUE);
         return c;
     }
 
+    /** Removes a connection from the group while leaving its connected status unchanged. */
     public void remove (Connection c)
     {
         _connections.remove(c);

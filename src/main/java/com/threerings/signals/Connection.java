@@ -3,7 +3,7 @@ package com.threerings.signals;
 public interface Connection
 {
     /**
-     * Prevent the Listener from receiving any further apply calls.
+     * Prevent the Listener from receiving apply calls from dispatches after the disconnect.
      */
     void disconnect ();
 
