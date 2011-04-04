@@ -24,10 +24,8 @@
 
 package com.threerings.signals;
 
-import java.lang.Comparable;
 import java.util.Collections;
-import java.util.List;
-import com.google.common.collect.Lists;
+
 import com.google.common.primitives.Ints;
 
 /**
@@ -62,8 +60,7 @@ class Signaller
 
     public void dispatch(final Object...args)
     {
-        ConnectionImpl<?>[] snapshot = _observers.toArray(new ConnectionImpl<?>[_observers.size()]);
-        for (ConnectionImpl<?> conn : snapshot) {
+        for (ConnectionImpl<?> conn : _observers.snapshot()) {
             if (!conn.apply(args)) {
                 conn.disconnect();
             }
@@ -145,5 +142,5 @@ class Signaller
         }
     }
 
-    protected final List<ConnectionImpl<?>> _observers = Lists.newArrayList();
+    protected final SnapshotArrayList _observers = new SnapshotArrayList();
 }
