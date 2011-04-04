@@ -2,7 +2,6 @@ This is a Java reinterpretation of [Robert Penner's as3-signals](https://github.
 
 Usage
 -----
-
 Using a signal is a 3 step process. First, create a signal on the class that will be firing
 events:
 
@@ -43,3 +42,7 @@ If a listener is no longer interested in a signal, it can be removed from the si
 can be called from the `Connection` returned when adding the signal. Adding, removing, and
 dispatching can be done in any order from a single thread, but the behavior is undefined for
 modifying the signal from multiple threads simultaneously.
+
+Getting
+-------
+The 0.1 release of signals is available as a [jar](http://ooo-maven.googlecode.com/hg/repository/com/threerings/signals/0.1/signals-0.1.jar), or you can use the `http://ooo-maven.googlecode.com/hg/repository` repository in Maven with a dependency on `com.threerings:signals:0.1`.
