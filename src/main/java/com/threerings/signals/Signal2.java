@@ -33,17 +33,32 @@ public class Signal2<Type1, Type2>
 
     public Connection add (Listener0 l)
     {
-        return _signaller.connect(l);
+       return add(l, Signals.DEFAULT_PRIORITY);
+    }
+
+    public Connection add (Listener0 l, int priority)
+    {
+        return _signaller.connect(l, priority);
     }
 
     public Connection add (Listener1<Type1> l)
     {
-        return _signaller.connect(l);
+        return add(l, Signals.DEFAULT_PRIORITY);
+    }
+
+    public Connection add (Listener1<Type1> l, int priority)
+    {
+        return _signaller.connect(l, priority);
     }
 
     public Connection add (Listener2<Type1, Type2> l)
     {
-        return _signaller.connect(l);
+        return add(l, Signals.DEFAULT_PRIORITY);
+    }
+
+    public Connection add (Listener2<Type1, Type2> l, int priority)
+    {
+        return _signaller.connect(l, priority);
     }
 
     public void remove (Object l)

@@ -24,22 +24,25 @@
 
 package com.threerings.signals;
 
+import java.lang.Comparable;
+import java.util.Collections;
 import java.util.List;
 import com.google.common.collect.Lists;
+import com.google.common.primitives.Ints;
 
 class Signaller
 {
     @SuppressWarnings("rawtypes")
-    public Connection connect (Object listener)
+    public Connection connect (Object listener, int priority)
     {
         if (listener instanceof Listener3) {
-            return new Connection3Impl((Listener3)listener);
+            return new Connection3Impl((Listener3)listener, priority);
         } else if (listener instanceof Listener2) {
-            return new Connection2Impl((Listener2)listener);
+            return new Connection2Impl((Listener2)listener, priority);
         } else if (listener instanceof Listener1) {
-            return new Connection1Impl((Listener1)listener);
+            return new Connection1Impl((Listener1)listener, priority);
         } else {
-            return new Connection0Impl((Listener0)listener);
+            return new Connection0Impl((Listener0)listener, priority);
         }
     }
 
@@ -63,10 +66,12 @@ class Signaller
         }
     }
 
-    protected abstract class ConnectionImpl<L> implements Connection {
-        public ConnectionImpl (L listener) {
+    protected abstract class ConnectionImpl<L> implements Connection, Comparable<ConnectionImpl> {
+        public ConnectionImpl (L listener, int priority) {
+            _priority = priority;
             _listener = listener;
             _observers.add(this);
+            Collections.sort(_observers);
         }
 
         public void disconnect () {
@@ -85,24 +90,29 @@ class Signaller
             return _stayInList;
         }
 
+        public int compareTo (ConnectionImpl other) {
+            return -Ints.compare(_priority, other._priority);
+        }
+
         protected abstract void applyToArity(Object...args);
 
         protected boolean _stayInList = true;
         protected boolean _connected = true;
         protected final L _listener;
+        protected final int _priority;
     }
 
     protected class Connection0Impl extends ConnectionImpl<Listener0> {
-        public Connection0Impl (Listener0 listener) {
-            super(listener);
+        public Connection0Impl (Listener0 listener, int priority) {
+            super(listener, priority);
         }
         protected void applyToArity (Object...args) {
             _listener.apply();
         }
     }
     protected class Connection1Impl extends ConnectionImpl<Listener1<?>> {
-        public Connection1Impl (Listener1<?> listener) {
-            super(listener);
+        public Connection1Impl (Listener1<?> listener, int priority) {
+            super(listener, priority);
         }
         @SuppressWarnings({"unchecked", "rawtypes"}) protected void applyToArity (Object...args) {
             ((Listener1)_listener).apply(args[0]);
@@ -110,8 +120,8 @@ class Signaller
     }
 
     protected class Connection2Impl extends ConnectionImpl<Listener2<?, ?>> {
-        public Connection2Impl (Listener2<?, ?> listener) {
-            super(listener);
+        public Connection2Impl (Listener2<?, ?> listener, int priority) {
+            super(listener, priority);
         }
         @SuppressWarnings({"unchecked", "rawtypes"}) protected void applyToArity (Object...args) {
             ((Listener2)_listener).apply(args[0], args[1]);
@@ -119,8 +129,8 @@ class Signaller
     }
 
     protected class Connection3Impl extends ConnectionImpl<Listener3<?, ?, ?>> {
-        public Connection3Impl (Listener3<?, ?, ?> listener) {
-            super(listener);
+        public Connection3Impl (Listener3<?, ?, ?> listener, int priority) {
+            super(listener, priority);
         }
         @SuppressWarnings({"unchecked", "rawtypes"}) protected void applyToArity (Object...args) {
             ((Listener3)_listener).apply(args[0], args[1], args[2]);

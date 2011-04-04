@@ -26,6 +26,8 @@ package com.threerings.signals;
 
 public class Signals
 {
+    public static final int DEFAULT_PRIORITY = 0;
+
     public static Signal0 newSignal0 ()
     {
         return new Signal0();

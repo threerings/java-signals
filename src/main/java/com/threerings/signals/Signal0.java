@@ -33,7 +33,12 @@ public class Signal0
 
     public Connection add (Listener0 l)
     {
-        return _signaller.connect(l);
+        return add(l, Signals.DEFAULT_PRIORITY);
+    }
+
+    public Connection add (Listener0 l, int priority)
+    {
+        return _signaller.connect(l, priority);
     }
 
     public void remove (Object l)
