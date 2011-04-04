@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<project name="signals" default="compile" basedir=".">
+  <property name="src.dir"     value="src/main/java"/>
+  <property name="test.dir"    value="src/test/java"/>
+  <property name="deploy.dir"  value="dist"/>
+  <property name="classes.dir" value="${deploy.dir}/classes"/>
+  <property name="tclasses.dir" value="${deploy.dir}/test-classes"/>
+
+  <property name="ooo-build.vers" value="2.1"/>
+  <ant antfile="bootstrap.xml"/>
+  <import file="${user.home}/.m2/ooo-build/${ooo-build.vers}/ooo-build.xml"/>
+
+  <target name="-prepare" depends="-init-contrib">
+    <mkdir dir="${deploy.dir}"/>
+    <mavendep pom="pom.xml" scope="compile"/>
+    <mavendep pom="pom.xml" id="test" scope="test"/>
+  </target>
+
+  <target name="clean" description="Cleans out compiled classes and docs.">
+    <delete dir="${classes.dir}"/>
+    <delete dir="${tclasses.dir}"/>
+    <delete dir="${deploy.dir}/docs"/>
+  </target>
+
+  <target name="distclean" description="Cleans out all build resultss.">
+    <delete dir="${deploy.dir}"/>
+  </target>
+
+  <target name="compile" depends="-prepare" description="Compiles main and test sources.">
+    <mkdir dir="${classes.dir}"/>
+    <ooojavac srcdir="${src.dir}" destdir="${classes.dir}" version="1.5"
+        classpathref="pom.xml.path"/>
+
+    <mkdir dir="${tclasses.dir}"/>
+    <path id="built.classpath">
+      <path refid="test.path"/>
+      <pathelement location="${classes.dir}"/>
+    </path>
+    <ooojavac srcdir="${test.dir}" destdir="${tclasses.dir}" version="1.5"
+        classpathref="built.classpath"/>
+  </target>
+
+  <property name="test" value=""/>
+  <target name="tests" depends="compile"
+          description="Runs unit tests. Use -Dtest=Foo to run only FooTest.">
+    <taskdef name="unit" classpathref="test.path"
+      classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask"/>
+    <mkdir dir="${deploy.dir}/test-reports"/>
+    <unit printsummary="off" haltonfailure="yes" fork="${junit.fork}">
+      <classpath>
+        <pathelement location="${classes.dir}"/>
+        <pathelement location="${tclasses.dir}"/>
+        <path refid="built.classpath"/>
+      </classpath>
+      <sysproperty key="test_dir" value="${tclasses.dir}"/>
+      <formatter type="brief" usefile="false"/>
+      <formatter type="xml"/>
+      <batchtest todir="${deploy.dir}/test-reports">
+        <fileset dir="${test.dir}" includes="**/*${test}*Test.java"/>
+      </batchtest>
+    </unit>
+  </target>
+
+  <target name="dist" depends="compile" description="Builds jar files.">
+    <jar destfile="${deploy.dir}/${ant.project.name}.jar" basedir="${classes.dir}"/>
+  </target>
+
+  <target name="maven-deploy" depends="dist"
+          description="Deploys our build artifacts to a Maven repository.">
+    <mavendeploy file="${deploy.dir}/${ant.project.name}.jar" pom="pom.xml" srcdir="${src.dir}"/>
+  </target>
+</project>
