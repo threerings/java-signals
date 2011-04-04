@@ -66,7 +66,8 @@ class Signaller
         }
     }
 
-    protected abstract class ConnectionImpl<L> implements Connection, Comparable<ConnectionImpl> {
+    protected abstract class ConnectionImpl<L>
+        implements Connection, Comparable<ConnectionImpl<?>> {
         public ConnectionImpl (L listener, int priority) {
             _priority = priority;
             _listener = listener;
@@ -90,7 +91,7 @@ class Signaller
             return _stayInList;
         }
 
-        public int compareTo (ConnectionImpl other) {
+        public int compareTo (ConnectionImpl<?> other) {
             return -Ints.compare(_priority, other._priority);
         }
 
@@ -106,7 +107,7 @@ class Signaller
         public Connection0Impl (Listener0 listener, int priority) {
             super(listener, priority);
         }
-        protected void applyToArity (Object...args) {
+        @Override protected void applyToArity (Object...args) {
             _listener.apply();
         }
     }
@@ -114,7 +115,8 @@ class Signaller
         public Connection1Impl (Listener1<?> listener, int priority) {
             super(listener, priority);
         }
-        @SuppressWarnings({"unchecked", "rawtypes"}) protected void applyToArity (Object...args) {
+        @Override @SuppressWarnings({"unchecked", "rawtypes"})
+        protected void applyToArity (Object...args) {
             ((Listener1)_listener).apply(args[0]);
         }
     }
@@ -123,7 +125,8 @@ class Signaller
         public Connection2Impl (Listener2<?, ?> listener, int priority) {
             super(listener, priority);
         }
-        @SuppressWarnings({"unchecked", "rawtypes"}) protected void applyToArity (Object...args) {
+        @Override @SuppressWarnings({"unchecked", "rawtypes"})
+        protected void applyToArity (Object...args) {
             ((Listener2)_listener).apply(args[0], args[1]);
         }
     }
@@ -132,7 +135,8 @@ class Signaller
         public Connection3Impl (Listener3<?, ?, ?> listener, int priority) {
             super(listener, priority);
         }
-        @SuppressWarnings({"unchecked", "rawtypes"}) protected void applyToArity (Object...args) {
+        @Override @SuppressWarnings({"unchecked", "rawtypes"})
+        protected void applyToArity (Object...args) {
             ((Listener3)_listener).apply(args[0], args[1], args[2]);
         }
     }
