@@ -30,6 +30,10 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Ints;
 
+/**
+ * The workhorse that does all the connection management and dispatching for the arity types. Not
+ * part of the public API.
+ */
 class Signaller
 {
     @SuppressWarnings("rawtypes")

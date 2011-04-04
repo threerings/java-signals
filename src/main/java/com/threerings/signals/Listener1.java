@@ -26,5 +26,6 @@ package com.threerings.signals;
 
 public interface Listener1<Type1>
 {
+    /** Called when any signals this listener is connected to dispatch. */
     void apply (Type1 arg1);
 }

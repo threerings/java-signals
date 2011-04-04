@@ -24,36 +24,50 @@
 
 package com.threerings.signals;
 
-public class Signal1<Type1>
+/** Dispatches events to listeners with one accompanying argument. */
+public class Signal1<A>
 {
-    public void dispatch (Type1 arg1)
+    /** Calls apply on all connected listeners. */
+    public void dispatch (A a)
     {
-        _signaller.dispatch(arg1);
+        _signaller.dispatch(a);
     }
 
-    public Connection add (Listener0 l)
+    /** Adds <code>listener</code> at {@link Signals#DEFAULT_PRIORITY}. */
+    public Connection add (Listener0 listener)
     {
-        return add(l, Signals.DEFAULT_PRIORITY);
+        return add(listener, Signals.DEFAULT_PRIORITY);
+    }
+    /**
+     * Adds <code>listener</code> at <code>priority</code>. Listeners with a higher priority will
+     * have their apply called before listeners with a lower priority. Listeners with equal priority
+     * are applied in the order they're added to the signal.
+     */
+    public Connection add (Listener0 listener, int priority)
+    {
+        return _signaller.connect(listener, priority);
     }
 
-    public Connection add (Listener0 l, int priority)
+    /** Adds <code>listener</code> at {@link Signals#DEFAULT_PRIORITY}. */
+    public Connection add (Listener1<A> listener)
     {
-        return _signaller.connect(l, priority);
+        return add(listener, Signals.DEFAULT_PRIORITY);
     }
 
-    public Connection add (Listener1<Type1> l)
+    /**
+     * Adds <code>listener</code> at <code>priority</code>. Listeners with a higher priority will
+     * have their apply called before listeners with a lower priority. Listeners with equal priority
+     * are applied in the order they're added to the signal.
+     */
+    public Connection add (Listener1<A> listener, int priority)
     {
-        return add(l, Signals.DEFAULT_PRIORITY);
+        return _signaller.connect(listener, priority);
     }
 
-    public Connection add (Listener1<Type1> l, int priority)
+    /** Removes <code>listener</code> from this signal if it's present.*/
+    public void remove (Object listener)
     {
-        return _signaller.connect(l, priority);
-    }
-
-    public void remove (Object l)
-    {
-        _signaller.disconnect(l);
+        _signaller.disconnect(listener);
     }
 
     protected final Signaller _signaller = new Signaller();

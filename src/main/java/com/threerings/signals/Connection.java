@@ -24,6 +24,10 @@
 
 package com.threerings.signals;
 
+/**
+ * The link between a signal and a listener. Can be added to a <code>ConnectionGroup</code> to
+ * perform bulk operations on Connections.
+ */
 public interface Connection
 {
     /**

@@ -24,56 +24,83 @@
 
 package com.threerings.signals;
 
-public class Signal3<Type1, Type2, Type3>
+/** Dispatches events to listeners with three accompanying arguments. */
+public class Signal3<A, B, C>
 {
-    public void dispatch (Type1 arg1, Type2 arg2, Type3 arg3)
+    /** Calls apply on all connected listeners. */
+    public void dispatch (A a, B b, C c)
     {
-        _signaller.dispatch(arg1, arg2, arg3);
+        _signaller.dispatch(a, b, c);
     }
 
-    public Connection add (Listener0 l)
+    /** Adds <code>listener</code> at {@link Signals#DEFAULT_PRIORITY}. */
+    public Connection add (Listener0 listener)
     {
-        return add(l, Signals.DEFAULT_PRIORITY);
+        return add(listener, Signals.DEFAULT_PRIORITY);
     }
 
-    public Connection add (Listener0 l, int priority)
+    /**
+     * Adds <code>listener</code> at <code>priority</code>. Listeners with a higher priority will
+     * have their apply called before listeners with a lower priority. Listeners with equal priority
+     * are applied in the order they're added to the signal.
+     */
+    public Connection add (Listener0 listener, int priority)
     {
-        return _signaller.connect(l, priority);
+        return _signaller.connect(listener, priority);
     }
 
-    public Connection add (Listener1<Type1> l)
+    /** Adds <code>listener</code> at {@link Signals#DEFAULT_PRIORITY}. */
+    public Connection add (Listener1<A> listener)
     {
-        return add(l, Signals.DEFAULT_PRIORITY);
+        return add(listener, Signals.DEFAULT_PRIORITY);
     }
 
-    public Connection add (Listener1<Type1> l, int priority)
+    /**
+     * Adds <code>listener</code> at <code>priority</code>. Listeners with a higher priority will
+     * have their apply called before listeners with a lower priority. Listeners with equal priority
+     * are applied in the order they're added to the signal.
+     */
+    public Connection add (Listener1<A> listener, int priority)
     {
-        return _signaller.connect(l, priority);
+        return _signaller.connect(listener, priority);
     }
 
-    public Connection add (Listener2<Type1, Type2> l)
+    /** Adds <code>listener</code> at {@link Signals#DEFAULT_PRIORITY}. */
+    public Connection add (Listener2<A, B> listener)
     {
-        return add(l, Signals.DEFAULT_PRIORITY);
+        return add(listener, Signals.DEFAULT_PRIORITY);
     }
 
-    public Connection add (Listener2<Type1, Type2> l, int priority)
+    /**
+     * Adds <code>listener</code> at <code>priority</code>. Listeners with a higher priority will
+     * have their apply called before listeners with a lower priority. Listeners with equal priority
+     * are applied in the order they're added to the signal.
+     */
+    public Connection add (Listener2<A, B> listener, int priority)
     {
-        return _signaller.connect(l, priority);
+        return _signaller.connect(listener, priority);
     }
 
-    public Connection add (Listener3<Type1, Type2, Type3> l)
+    /** Adds <code>listener</code> at {@link Signals#DEFAULT_PRIORITY}. */
+    public Connection add (Listener3<A, B, C> listener)
     {
-        return add(l, Signals.DEFAULT_PRIORITY);
+        return add(listener, Signals.DEFAULT_PRIORITY);
     }
 
-    public Connection add (Listener3<Type1, Type2, Type3> l, int priority)
+    /**
+     * Adds <code>listener</code> at <code>priority</code>. Listeners with a higher priority will
+     * have their apply called before listeners with a lower priority. Listeners with equal priority
+     * are applied in the order they're added to the signal.
+     */
+    public Connection add (Listener3<A, B, C> listener, int priority)
     {
-        return _signaller.connect(l, priority);
+        return _signaller.connect(listener, priority);
     }
 
-    public void remove (Object l)
+    /** Removes <code>listener</code> from this signal if it's present.*/
+    public void remove (Object listener)
     {
-        _signaller.disconnect(l);
+        _signaller.disconnect(listener);
     }
 
     protected final Signaller _signaller = new Signaller();
