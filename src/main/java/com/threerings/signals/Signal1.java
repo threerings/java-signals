@@ -26,6 +26,7 @@ package com.threerings.signals;
 
 /** Dispatches events to listeners with one accompanying argument. */
 public class Signal1<A>
+    implements SignalConnector1<A>
 {
     /** Calls apply on all connected listeners. */
     public void dispatch (A a)
@@ -34,24 +35,24 @@ public class Signal1<A>
     }
 
     /** Adds <code>listener</code> at {@link Signals#DEFAULT_PRIORITY}. */
-    public Connection add (Listener0 listener)
+    public Connection connect (Listener0 listener)
     {
-        return add(listener, Signals.DEFAULT_PRIORITY);
+        return connect(listener, Signals.DEFAULT_PRIORITY);
     }
     /**
      * Adds <code>listener</code> at <code>priority</code>. Listeners with a higher priority will
      * have their apply called before listeners with a lower priority. Listeners with equal priority
      * are applied in the order they're added to the signal.
      */
-    public Connection add (Listener0 listener, int priority)
+    public Connection connect (Listener0 listener, int priority)
     {
         return _signaller.connect(listener, priority);
     }
 
     /** Adds <code>listener</code> at {@link Signals#DEFAULT_PRIORITY}. */
-    public Connection add (Listener1<A> listener)
+    public Connection connect (Listener1<A> listener)
     {
-        return add(listener, Signals.DEFAULT_PRIORITY);
+        return connect(listener, Signals.DEFAULT_PRIORITY);
     }
 
     /**
@@ -59,13 +60,13 @@ public class Signal1<A>
      * have their apply called before listeners with a lower priority. Listeners with equal priority
      * are applied in the order they're added to the signal.
      */
-    public Connection add (Listener1<A> listener, int priority)
+    public Connection connect (Listener1<A> listener, int priority)
     {
         return _signaller.connect(listener, priority);
     }
 
     /** Removes <code>listener</code> from this signal if it's present.*/
-    public void remove (Object listener)
+    public void disconnect(Object listener)
     {
         _signaller.disconnect(listener);
     }

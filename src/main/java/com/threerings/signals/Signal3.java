@@ -26,6 +26,7 @@ package com.threerings.signals;
 
 /** Dispatches events to listeners with three accompanying arguments. */
 public class Signal3<A, B, C>
+    implements SignalConnector3<A, B, C>
 {
     /** Calls apply on all connected listeners. */
     public void dispatch (A a, B b, C c)
@@ -34,9 +35,9 @@ public class Signal3<A, B, C>
     }
 
     /** Adds <code>listener</code> at {@link Signals#DEFAULT_PRIORITY}. */
-    public Connection add (Listener0 listener)
+    public Connection connect (Listener0 listener)
     {
-        return add(listener, Signals.DEFAULT_PRIORITY);
+        return connect(listener, Signals.DEFAULT_PRIORITY);
     }
 
     /**
@@ -44,15 +45,15 @@ public class Signal3<A, B, C>
      * have their apply called before listeners with a lower priority. Listeners with equal priority
      * are applied in the order they're added to the signal.
      */
-    public Connection add (Listener0 listener, int priority)
+    public Connection connect (Listener0 listener, int priority)
     {
         return _signaller.connect(listener, priority);
     }
 
     /** Adds <code>listener</code> at {@link Signals#DEFAULT_PRIORITY}. */
-    public Connection add (Listener1<A> listener)
+    public Connection connect (Listener1<A> listener)
     {
-        return add(listener, Signals.DEFAULT_PRIORITY);
+        return connect(listener, Signals.DEFAULT_PRIORITY);
     }
 
     /**
@@ -60,15 +61,15 @@ public class Signal3<A, B, C>
      * have their apply called before listeners with a lower priority. Listeners with equal priority
      * are applied in the order they're added to the signal.
      */
-    public Connection add (Listener1<A> listener, int priority)
+    public Connection connect (Listener1<A> listener, int priority)
     {
         return _signaller.connect(listener, priority);
     }
 
     /** Adds <code>listener</code> at {@link Signals#DEFAULT_PRIORITY}. */
-    public Connection add (Listener2<A, B> listener)
+    public Connection connect (Listener2<A, B> listener)
     {
-        return add(listener, Signals.DEFAULT_PRIORITY);
+        return connect(listener, Signals.DEFAULT_PRIORITY);
     }
 
     /**
@@ -76,15 +77,15 @@ public class Signal3<A, B, C>
      * have their apply called before listeners with a lower priority. Listeners with equal priority
      * are applied in the order they're added to the signal.
      */
-    public Connection add (Listener2<A, B> listener, int priority)
+    public Connection connect (Listener2<A, B> listener, int priority)
     {
         return _signaller.connect(listener, priority);
     }
 
     /** Adds <code>listener</code> at {@link Signals#DEFAULT_PRIORITY}. */
-    public Connection add (Listener3<A, B, C> listener)
+    public Connection connect (Listener3<A, B, C> listener)
     {
-        return add(listener, Signals.DEFAULT_PRIORITY);
+        return connect(listener, Signals.DEFAULT_PRIORITY);
     }
 
     /**
@@ -92,13 +93,13 @@ public class Signal3<A, B, C>
      * have their apply called before listeners with a lower priority. Listeners with equal priority
      * are applied in the order they're added to the signal.
      */
-    public Connection add (Listener3<A, B, C> listener, int priority)
+    public Connection connect (Listener3<A, B, C> listener, int priority)
     {
         return _signaller.connect(listener, priority);
     }
 
     /** Removes <code>listener</code> from this signal if it's present.*/
-    public void remove (Object listener)
+    public void disconnect(Object listener)
     {
         _signaller.disconnect(listener);
     }

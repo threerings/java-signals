@@ -19,33 +19,33 @@ public class SignalPriorityTest
     public void callInPriorityOrder ()
     {
         NotingListener defPriAddedFirst = new NotingListener();
-        Connection firstConn = _sig.add(defPriAddedFirst);
+        Connection firstConn = _sig.connect(defPriAddedFirst);
         checkOrdering(defPriAddedFirst);
 
         NotingListener defPriAddedSecond = new NotingListener();
-        _sig.add(defPriAddedSecond);
+        _sig.connect(defPriAddedSecond);
         checkOrdering(defPriAddedFirst, defPriAddedSecond);
 
         NotingListener medPriAddedThird = new NotingListener();
-        _sig.add(medPriAddedThird, Signals.DEFAULT_PRIORITY + 1);
+        _sig.connect(medPriAddedThird, Signals.DEFAULT_PRIORITY + 1);
         checkOrdering(medPriAddedThird, defPriAddedFirst, defPriAddedSecond);
 
         NotingListener highPriAddedFourth = new NotingListener();
-        _sig.add(highPriAddedFourth, Signals.DEFAULT_PRIORITY + 2);
+        _sig.connect(highPriAddedFourth, Signals.DEFAULT_PRIORITY + 2);
         checkOrdering(highPriAddedFourth, medPriAddedThird, defPriAddedFirst, defPriAddedSecond);
 
         NotingListener lowPriAddedFifth = new NotingListener();
-        _sig.add(lowPriAddedFifth, Signals.DEFAULT_PRIORITY - 1);
+        _sig.connect(lowPriAddedFifth, Signals.DEFAULT_PRIORITY - 1);
         checkOrdering(highPriAddedFourth, medPriAddedThird, defPriAddedFirst, defPriAddedSecond,
             lowPriAddedFifth);
 
         NotingListener defPriAddedLast = new NotingListener();
-        _sig.add(defPriAddedLast);
+        _sig.connect(defPriAddedLast);
         checkOrdering(highPriAddedFourth, medPriAddedThird, defPriAddedFirst, defPriAddedSecond,
             defPriAddedLast, lowPriAddedFifth);
 
         // Check that the sort is stable
-        _sig.remove(defPriAddedSecond);
+        _sig.disconnect(defPriAddedSecond);
         checkOrdering(highPriAddedFourth, medPriAddedThird, defPriAddedFirst, defPriAddedLast,
             lowPriAddedFifth);
         firstConn.disconnect();

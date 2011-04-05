@@ -26,6 +26,7 @@ package com.threerings.signals;
 
 /** Dispatches events to listeners with no accompanying arguments. */
 public class Signal0
+    implements SignalConnector0
 {
     /** Calls apply on all connected listeners. */
     public void dispatch ()
@@ -34,9 +35,9 @@ public class Signal0
     }
 
     /** Adds <code>listener</code> at {@link Signals#DEFAULT_PRIORITY}. */
-    public Connection add (Listener0 listener)
+    public Connection connect (Listener0 listener)
     {
-        return add(listener, Signals.DEFAULT_PRIORITY);
+        return connect(listener, Signals.DEFAULT_PRIORITY);
     }
 
     /**
@@ -44,13 +45,13 @@ public class Signal0
      * have their apply called before listeners with a lower priority. Listeners with equal priority
      * are applied in the order they're added to the signal.
      */
-    public Connection add (Listener0 listener, int priority)
+    public Connection connect (Listener0 listener, int priority)
     {
         return _signaller.connect(listener, priority);
     }
 
     /** Removes <code>listener</code> from this signal if it's present.*/
-    public void remove (Object listener)
+    public void disconnect(Object listener)
     {
         _signaller.disconnect(listener);
     }

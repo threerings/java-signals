@@ -12,7 +12,7 @@ public class SignalTest
     {
         final AtomicInteger calls = new AtomicInteger();
         final Signal0 sig = Signals.newSignal0();
-        final Connection firstConn = sig.add(new Listener0 () {
+        final Connection firstConn = sig.connect(new Listener0 () {
             public void apply () {
                 calls.incrementAndGet();
             }});
@@ -20,12 +20,12 @@ public class SignalTest
             public void apply () {
                 calls.incrementAndGet();
             }};
-        sig.add(new Listener0() {
+        sig.connect(new Listener0() {
             public void apply () {
                 firstConn.disconnect();
-                sig.remove(thirdLis);
+                sig.disconnect(thirdLis);
             }});
-        sig.add(thirdLis);
+        sig.connect(thirdLis);
         sig.dispatch();
         assertEquals(1, calls.get());
     }
@@ -35,7 +35,7 @@ public class SignalTest
     {
         final AtomicInteger calls = new AtomicInteger();
         ConnectionGroup group = new ConnectionGroup();
-        Connection conn = group.add(_stringInt.add(new Listener3<String, Integer, Integer> () {
+        Connection conn = group.add(_stringInt.connect(new Listener3<String, Integer, Integer> () {
             public void apply (String str, Integer i, Integer other) {
                 assertEquals(_first, str);
                 assertEquals(_second, i);
@@ -44,21 +44,21 @@ public class SignalTest
             }
         }));
 
-        group.add(_stringInt.add(new Listener1<String> () {
+        group.add(_stringInt.connect(new Listener1<String> () {
             public void apply (String str) {
                 assertEquals(_first, str);
-                _stringInt.remove(this);
+                _stringInt.disconnect(this);
                 calls.incrementAndGet();
             }
         }));
 
-        group.add(_stringInt.add(new Listener0 () {
+        group.add(_stringInt.connect(new Listener0 () {
             public void apply () {
                 calls.incrementAndGet();
             }
         }).once());
 
-        group.add(_stringInt.add(new Listener0 () {
+        group.add(_stringInt.connect(new Listener0 () {
             public void apply () {
                 calls.incrementAndGet();
             }}));
