@@ -43,5 +43,5 @@ public interface SignalConnector3<A, B, C>
     Connection connect (Listener3<A, B, C> listener, int priority);
 
     /** Removes <code>listener</code> from this signal if it's present.*/
-    void disconnect(Object listener);
+    void disconnect (Listener listener);
 }

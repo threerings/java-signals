@@ -24,7 +24,7 @@
 
 package com.threerings.signals;
 
-public interface Listener3<Type1, Type2, Type3>
+public interface Listener3<Type1, Type2, Type3> extends Listener
 {
     /** Called when any signals this listener is connected to dispatch. */
     void apply (Type1 arg1, Type2 arg2, Type3 arg3);

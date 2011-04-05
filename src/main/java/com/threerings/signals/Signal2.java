@@ -83,7 +83,7 @@ public class Signal2<A, B>
     }
 
     /** Removes <code>listener</code> from this signal if it's present.*/
-    public void disconnect(Object listener)
+    public void disconnect (Listener listener)
     {
         _signaller.disconnect(listener);
     }
