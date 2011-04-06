@@ -25,6 +25,7 @@
 package com.threerings.signals;
 
 import java.util.Collections;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.google.common.primitives.Ints;
 
@@ -58,9 +59,9 @@ class Signaller
         }
     }
 
-    public void dispatch(final Object...args)
+    public void dispatch (Object...args)
     {
-        for (ConnectionImpl<?> conn : _observers.snapshot()) {
+        for (ConnectionImpl<?> conn : _observers) {
             if (!conn.apply(args)) {
                 conn.disconnect();
             }
@@ -73,8 +74,17 @@ class Signaller
             Signaller.this.disconnect(listener);
             _priority = priority;
             _listener = listener;
-            _observers.add(this);
-            Collections.sort(_observers);
+            int idx = Collections.binarySearch(_observers, this);
+            if (idx < 0) {
+                // Nothing with this priority in the list, so use binarySearch's insertionPoint
+                idx = -idx - 1;
+            } else {
+                // Found something with the priority, so sort this past items at the same priority
+                while (idx < _observers.size() && _priority == _observers.get(idx)._priority) {
+                    idx++;
+                }
+            }
+            _observers.add(idx, this);
         }
 
         public void disconnect () {
@@ -143,5 +153,7 @@ class Signaller
         }
     }
 
-    protected final SnapshotArrayList _observers = new SnapshotArrayList();
+    /** Connections to the signal sorted by priority and then insertion order. */
+    protected final CopyOnWriteArrayList<ConnectionImpl<?>> _observers =
+        new CopyOnWriteArrayList<Signaller.ConnectionImpl<?>>();
 }
