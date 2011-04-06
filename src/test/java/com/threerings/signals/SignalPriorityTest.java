@@ -48,6 +48,12 @@ public class SignalPriorityTest
         _sig.disconnect(defPriAddedSecond);
         checkOrdering(highPriAddedFourth, medPriAddedThird, defPriAddedFirst, defPriAddedLast,
             lowPriAddedFifth);
+
+        // Reconnecting a listener removes its previous connection and adds a new one
+        firstConn = _sig.connect(defPriAddedFirst);
+        checkOrdering(highPriAddedFourth, medPriAddedThird, defPriAddedLast, defPriAddedFirst,
+            lowPriAddedFifth);
+
         firstConn.disconnect();
         checkOrdering(highPriAddedFourth, medPriAddedThird, defPriAddedLast, lowPriAddedFifth);
     }

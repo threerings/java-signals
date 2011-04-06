@@ -63,8 +63,6 @@ public class SignalTest
                 calls.incrementAndGet();
             }}));
 
-
-
         dispatch("MyString", 5, 6);
         dispatch("AnotherString", 999, 7);
         conn.disconnect();

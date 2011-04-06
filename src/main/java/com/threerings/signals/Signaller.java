@@ -48,7 +48,7 @@ class Signaller
         }
     }
 
-    public void disconnect (final Object listener)
+    public void disconnect (Object listener)
     {
         for (ConnectionImpl<?> conn : _observers) {
             if (conn._listener == listener) {
@@ -70,6 +70,7 @@ class Signaller
     protected abstract class ConnectionImpl<L>
         implements Connection, Comparable<ConnectionImpl<?>> {
         public ConnectionImpl (L listener, int priority) {
+            Signaller.this.disconnect(listener);
             _priority = priority;
             _listener = listener;
             _observers.add(this);
