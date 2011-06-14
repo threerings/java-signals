@@ -50,7 +50,7 @@ public class Signal1<A>
     }
 
     /** Adds <code>listener</code> at {@link Signals#DEFAULT_PRIORITY}. */
-    public Connection connect (Listener1<A> listener)
+    public Connection connect (Listener1<? super A> listener)
     {
         return connect(listener, Signals.DEFAULT_PRIORITY);
     }
@@ -60,7 +60,7 @@ public class Signal1<A>
      * have their apply called before listeners with a lower priority. Listeners with equal priority
      * are applied in the order they're added to the signal.
      */
-    public Connection connect (Listener1<A> listener, int priority)
+    public Connection connect (Listener1<? super A> listener, int priority)
     {
         return _signaller.connect(listener, priority);
     }
