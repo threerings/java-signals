@@ -51,7 +51,7 @@ public class Signal3<A, B, C>
     }
 
     /** Adds <code>listener</code> at {@link Signals#DEFAULT_PRIORITY}. */
-    public Connection connect (Listener1<A> listener)
+    public Connection connect (Listener1<? super A> listener)
     {
         return connect(listener, Signals.DEFAULT_PRIORITY);
     }
@@ -61,13 +61,13 @@ public class Signal3<A, B, C>
      * have their apply called before listeners with a lower priority. Listeners with equal priority
      * are applied in the order they're added to the signal.
      */
-    public Connection connect (Listener1<A> listener, int priority)
+    public Connection connect (Listener1<? super A> listener, int priority)
     {
         return _signaller.connect(listener, priority);
     }
 
     /** Adds <code>listener</code> at {@link Signals#DEFAULT_PRIORITY}. */
-    public Connection connect (Listener2<A, B> listener)
+    public Connection connect (Listener2<? super A, ? super B> listener)
     {
         return connect(listener, Signals.DEFAULT_PRIORITY);
     }
@@ -77,13 +77,13 @@ public class Signal3<A, B, C>
      * have their apply called before listeners with a lower priority. Listeners with equal priority
      * are applied in the order they're added to the signal.
      */
-    public Connection connect (Listener2<A, B> listener, int priority)
+    public Connection connect (Listener2<? super A, ? super B> listener, int priority)
     {
         return _signaller.connect(listener, priority);
     }
 
     /** Adds <code>listener</code> at {@link Signals#DEFAULT_PRIORITY}. */
-    public Connection connect (Listener3<A, B, C> listener)
+    public Connection connect (Listener3<? super A, ? super B, ? super C> listener)
     {
         return connect(listener, Signals.DEFAULT_PRIORITY);
     }
@@ -93,7 +93,7 @@ public class Signal3<A, B, C>
      * have their apply called before listeners with a lower priority. Listeners with equal priority
      * are applied in the order they're added to the signal.
      */
-    public Connection connect (Listener3<A, B, C> listener, int priority)
+    public Connection connect (Listener3<? super A, ? super B, ? super C> listener, int priority)
     {
         return _signaller.connect(listener, priority);
     }
