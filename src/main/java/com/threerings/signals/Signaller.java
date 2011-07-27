@@ -24,6 +24,8 @@
 
 package com.threerings.signals;
 
+import java.lang.RuntimeException;
+import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -52,7 +54,7 @@ class Signaller
     public void disconnect (Object listener)
     {
         for (ConnectionImpl<?> conn : _observers) {
-            if (conn._listener == listener) {
+            if (conn.get() == listener) {
                 conn.disconnect();
                 return;
             }
@@ -74,6 +76,7 @@ class Signaller
             Signaller.this.disconnect(listener);
             _priority = priority;
             _listener = listener;
+            _ref = new WeakReference<L>(_listener);
             int idx = Collections.binarySearch(_observers, this);
             if (idx < 0) {
                 // Nothing with this priority in the list, so use binarySearch's insertionPoint
@@ -87,6 +90,10 @@ class Signaller
             _observers.add(idx, this);
         }
 
+        public L get () {
+            return _listener == null ? _ref.get() : _listener;
+        }
+
         public void disconnect () {
             _connected = false;
             _observers.remove(this);
@@ -97,9 +104,25 @@ class Signaller
             return this;
         }
 
+        public Connection makeWeak () {
+            _listener = null;
+            return this;
+        }
+
         public boolean apply (Object...args) {
             if (!_connected) { return true; }
-            applyToArity(args);
+            // Get a reference to listener before calling apply in case we're made weak
+            L listener = _listener;
+            if (listener != null) {
+                applyToArity(listener, args);
+            } else {
+                listener = _ref.get();
+                if (listener != null) {
+                    applyToArity(listener, args);
+                } else {
+                    return true;// We've been collected; remove us from the dispatch list
+                }
+            }
             return _stayInList;
         }
 
@@ -107,11 +130,12 @@ class Signaller
             return -Ints.compare(_priority, other._priority);
         }
 
-        protected abstract void applyToArity(Object...args);
+        protected abstract void applyToArity(L listener, Object...args);
 
+        protected L _listener;
         protected boolean _stayInList = true;
         protected boolean _connected = true;
-        protected final L _listener;
+        protected final WeakReference<L> _ref;
         protected final int _priority;
     }
 
@@ -119,8 +143,8 @@ class Signaller
         public Connection0Impl (Listener0 listener, int priority) {
             super(listener, priority);
         }
-        @Override protected void applyToArity (Object...args) {
-            _listener.apply();
+        @Override protected void applyToArity (Listener0 listener, Object...args) {
+            listener.apply();
         }
     }
     protected class Connection1Impl extends ConnectionImpl<Listener1<?>> {
@@ -128,8 +152,8 @@ class Signaller
             super(listener, priority);
         }
         @Override @SuppressWarnings({"unchecked", "rawtypes"})
-        protected void applyToArity (Object...args) {
-            ((Listener1)_listener).apply(args[0]);
+        protected void applyToArity (Listener1 listener, Object...args) {
+            listener.apply(args[0]);
         }
     }
 
@@ -138,8 +162,8 @@ class Signaller
             super(listener, priority);
         }
         @Override @SuppressWarnings({"unchecked", "rawtypes"})
-        protected void applyToArity (Object...args) {
-            ((Listener2)_listener).apply(args[0], args[1]);
+        protected void applyToArity (Listener2 listener, Object...args) {
+            listener.apply(args[0], args[1]);
         }
     }
 
@@ -148,8 +172,8 @@ class Signaller
             super(listener, priority);
         }
         @Override @SuppressWarnings({"unchecked", "rawtypes"})
-        protected void applyToArity (Object...args) {
-            ((Listener3)_listener).apply(args[0], args[1], args[2]);
+        protected void applyToArity (Listener3 listener, Object...args) {
+            listener.apply(args[0], args[1], args[2]);
         }
     }
 

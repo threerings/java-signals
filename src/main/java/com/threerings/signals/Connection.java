@@ -40,4 +40,12 @@ public interface Connection
      * @return the Connection
      */
     Connection once ();
+
+    /**
+     * Only weakly reference the listener side of this connection. If there are no other references
+     * to the listener, it will eventually be garbage collected. By default Connections keep
+     * a strong reference to their listeners and will keep them resident in memory as long as the
+     * signal exists.
+     */
+    Connection makeWeak ();
 }
