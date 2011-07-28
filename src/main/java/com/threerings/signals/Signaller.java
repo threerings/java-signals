@@ -26,7 +26,6 @@
 
 package com.threerings.signals;
 
-import java.lang.RuntimeException;
 import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.concurrent.CopyOnWriteArrayList;
