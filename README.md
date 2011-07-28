@@ -5,30 +5,36 @@ Usage
 Using a signal is a 3 step process. First, create a signal on the class that will be firing
 events:
 
-    public class Dispatcher {
-        /** Dispatches the old value and the new value after it changes. */
-        public final Signal2<String, String> onChanged = Signals.newSignal2();
-    }
+```java
+public class Dispatcher {
+    /** Dispatches the old value and the new value after it changes. */
+    public final Signal2<String, String> onChanged = Signals.newSignal2();
+}
+```
 
 Then, add listeners to that signal as appropriate:
 
-    public class InterestedParty {
-        public void connectToDispatcher (Dispatcher d)
-        {
-            d.onChanged.add(new Listener1<String>() {
-                public void apply (String oldValue) {
-                    System.out.println("Dispatcher changed from " + oldValue);
-                }});
-        }
+```java
+public class InterestedParty {
+    public void connectToDispatcher (Dispatcher d)
+    {
+        d.onChanged.add(new Listener1<String>() {
+            public void apply (String oldValue) {
+                System.out.println("Dispatcher changed from " + oldValue);
+            }});
     }
+}
+```
 
 or
 
-    d.onChanged.add(new Listener0() {
-        public void apply () {
-            System.out.println("I'll only be called for one dispatch!");
-        }
-        }).once();
+```java
+d.onChanged.add(new Listener0() {
+    public void apply () {
+        System.out.println("I'll only be called for one dispatch!");
+    }
+    }).once();
+```
 
 if the listener only wants to receive the next dispatch.
 
