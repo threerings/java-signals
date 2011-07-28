@@ -127,7 +127,7 @@ class Signaller
         }
 
         public int compareTo (ConnectionImpl<?> other) {
-            return -Ints.compare(_priority, other._priority);
+            return Ints.compare(other._priority, _priority);
         }
 
         protected abstract void applyToArity(L listener, Object...args);
