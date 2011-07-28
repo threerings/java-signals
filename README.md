@@ -34,14 +34,16 @@ if the listener only wants to receive the next dispatch.
 
 Finally, dispatch that signal when the event occurs:
 
-    onChanged.dispatch("oldValue", "newValue);
+    onChanged.dispatch("oldValue", "newValue");
 
 That'll call apply on all the added listeners.
 
-If a listener is no longer interested in a signal, it can be removed from the signal, or disconnect
-can be called from the `Connection` returned when adding the signal. Adding, removing, and
-dispatching can be done in any order from a single thread, but the behavior is undefined for
-modifying the signal from multiple threads simultaneously.
+If a listener is no longer interested in a signal, it can be removed from the signal, or
+`Connection.disconnect` can be called.
+
+Connecting, disconnecting, and dispatching is thread-safe. After `Signal.disconnect(Listener)` or
+`Connection.disconnect` returns, a listener is guaranteed to never receive another call to its apply
+method.
 
 Getting
 -------
