@@ -40,7 +40,9 @@ if the listener only wants to receive the next dispatch.
 
 Finally, dispatch that signal when the event occurs:
 
-    onChanged.dispatch("oldValue", "newValue");
+```java
+onChanged.dispatch("oldValue", "newValue");
+```
 
 That'll call apply on all the added listeners.
 
