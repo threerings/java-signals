@@ -77,17 +77,19 @@ class Signaller
             _priority = priority;
             _listener = listener;
             _ref = new WeakReference<L>(_listener);
-            int idx = Collections.binarySearch(_observers, this);
-            if (idx < 0) {
-                // Nothing with this priority in the list, so use binarySearch's insertionPoint
-                idx = -idx - 1;
-            } else {
-                // Found something with the priority, so sort this past items at the same priority
-                while (idx < _observers.size() && _priority == _observers.get(idx)._priority) {
-                    idx++;
+            synchronized (_observers) {
+                int idx = Collections.binarySearch(_observers, this);
+                if (idx < 0) {
+                    // Nothing with this priority in the list, so use binarySearch's idx
+                    idx = -idx - 1;
+                } else {
+                    // Found something with the priority, so sort past items at the same priority
+                    while (idx < _observers.size() && _priority == _observers.get(idx)._priority) {
+                        idx++;
+                    }
                 }
+                _observers.add(idx, this);
             }
-            _observers.add(idx, this);
         }
 
         public L get () {
@@ -96,7 +98,9 @@ class Signaller
 
         public void disconnect () {
             _connected = false;
-            _observers.remove(this);
+            synchronized (_observers) {
+                _observers.remove(this);
+            }
         }
 
         public Connection once () {
@@ -134,7 +138,7 @@ class Signaller
 
         protected L _listener;
         protected boolean _stayInList = true;
-        protected boolean _connected = true;
+        protected volatile boolean _connected = true;
         protected final WeakReference<L> _ref;
         protected final int _priority;
     }
