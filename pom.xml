@@ -7,7 +7,7 @@
   <version>0.2-SNAPSHOT</version>
   <name>signals</name>
   <description>Simple, type-safe event dispatching</description>
-  <url>https://github.com/groves/java-signals</url>
+  <url>https://github.com/threerings/java-signals</url>
   <parent>
     <groupId>org.sonatype.oss</groupId>
     <artifactId>oss-parent</artifactId>
@@ -33,7 +33,7 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:git:git://github.com/groves/java-signals.git</connection>
+    <connection>scm:git:git://github.com/threerings/java-signals.git</connection>
   </scm>
   <dependencies>
     <dependency>
