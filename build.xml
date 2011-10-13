@@ -6,7 +6,7 @@
   <property name="classes.dir" value="${deploy.dir}/classes"/>
   <property name="tclasses.dir" value="${deploy.dir}/test-classes"/>
 
-  <property name="ooo-build.vers" value="2.5"/>
+  <property name="ooo-build.vers" value="2.8"/>
   <ant antfile="bootstrap.xml"/>
   <import file="${user.home}/.m2/ooo-build/${ooo-build.vers}/ooo-build.xml"/>
 
@@ -61,12 +61,22 @@
     </unit>
   </target>
 
+  <target name="javadoc" depends="-prepare" description="Builds the Java documentation">
+    <mkdir dir="${deploy.dir}/docs"/>
+    <javadoc sourcepath="${src.dir}" destdir="${deploy.dir}/docs"
+             additionalparam="-breakiterator" classpathref="pom.xml.path">
+      <link href="http://download.oracle.com/javase/6/docs/api/"/>
+      <link href="http://docs.guava-libraries.googlecode.com/git/javadoc/"/>
+    </javadoc>
+  </target>
+
   <target name="dist" depends="compile" description="Builds jar files.">
     <jar destfile="${deploy.dir}/${ant.project.name}.jar" basedir="${classes.dir}"/>
   </target>
 
-  <target name="maven-deploy" depends="dist"
+  <target name="maven-deploy" depends="dist,javadoc"
           description="Deploys our build artifacts to a Maven repository.">
-    <mavendeploy file="${deploy.dir}/${ant.project.name}.jar" pom="pom.xml" srcdir="${src.dir}"/>
+    <mavendeploy file="${deploy.dir}/${ant.project.name}.jar" pom="pom.xml"
+                 srcdir="${src.dir}" docdir="${deploy.dir}/docs"/>
   </target>
 </project>
