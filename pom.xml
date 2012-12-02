@@ -4,7 +4,7 @@
   <groupId>com.threerings</groupId>
   <artifactId>signals</artifactId>
   <packaging>jar</packaging>
-  <version>0.2-SNAPSHOT</version>
+  <version>0.2</version>
   <name>signals</name>
   <description>Simple, type-safe event dispatching</description>
   <url>https://github.com/threerings/java-signals</url>
@@ -38,8 +38,8 @@
   <dependencies>
     <dependency>
       <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>r08</version>
+      <artifactId>guava-jdk5</artifactId>
+      <version>13.0</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
