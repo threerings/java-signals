@@ -39,6 +39,8 @@
 
   <scm>
     <connection>scm:git:git://github.com/threerings/java-signals.git</connection>
+    <developerConnection>scm:git:git@github.com:threerings/java-signals.git</developerConnection>
+    <url>http://github.com/threerings/java-signals/</url>
   </scm>
 
   <dependencies>
