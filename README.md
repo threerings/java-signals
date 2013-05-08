@@ -55,4 +55,16 @@ method.
 
 Getting
 -------
-The 0.1 release of signals is available as a [jar](http://ooo-maven.googlecode.com/hg/repository/com/threerings/signals/0.1/signals-0.1.jar), or you can use the `http://ooo-maven.googlecode.com/hg/repository` repository in Maven with a dependency on `com.threerings:signals:0.1`.
+
+The 0.3 release of signals is available via Maven Central. Just add this to your POM:
+
+```
+<dependency>
+  <groupId>com.threerings</groupId>
+  <artifactId>signals</artifactId>
+  <version>0.3</version>
+</dependency>
+```
+
+You can also download it directly from
+[Maven Central](http://repo2.maven.org/maven2/com/threerings/signals/0.3/signals-0.3.jar).
