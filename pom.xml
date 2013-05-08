@@ -10,7 +10,7 @@
   <groupId>com.threerings</groupId>
   <artifactId>signals</artifactId>
   <packaging>jar</packaging>
-  <version>0.3-SNAPSHOT</version>
+  <version>0.3</version>
 
   <name>signals</name>
   <description>Simple, type-safe event dispatching</description>
